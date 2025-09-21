@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyLibrary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+<div class="header">
+    <h1>
+        <img src="{{ url_for('static', filename='img/books.png') }}" alt="Books Icon" class="header-icon">
+        My Library
+    </h1>
+</div>
+
+<div class="top-menu">
+
+    <nav>
+        <a href="{{ url_for('mylist') }}">My Library</a>
+        <a href="{{ url_for('create') }}">Add Book</a>
+        <a href="{{ url_for('inspiration') }}">Inspiration</a>
+    </nav>
+</div>
+
+
+<main>
+    {% block content %}
+    {% endblock %}
+    
+</main>
+
+<footer>
+    <p>© Jergus.co | Some text.</p>
+</footer>
+</body>
+</html>

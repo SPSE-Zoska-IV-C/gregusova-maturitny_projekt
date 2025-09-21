@@ -1,0 +1,31 @@
+{% extends '_base.html' %}
+
+{% block content %}
+<div class="article-preview">
+    <h2>My List</h2>
+</div>
+
+<div class="card-container">
+    {% for item in items %}
+    <div class="card" id="card-{{ item.id }}">
+        <img src="{{ item.image_url or '/img/default.jpg' }}" alt="Card image" class="card-img">
+        <div class="card-content">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+            <!-- Checkbox for marking as achieved -->
+            <form action="{{ url_for('delete_article', item_id=item.id) }}" method="POST">
+                <label>
+                    <input type="checkbox" onclick="this.form.submit()"> Achieved
+                </label>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Additional content from the provided HTML -->
+<div id="container3D">
+    <h1>A simple three.js app</h1>
+</div>
+<script type="module" src="js/main.js"></script>
+{% endblock %}

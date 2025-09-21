@@ -1,0 +1,121 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #dccfc6; /* Soft background color */
+    color: #6b4c41; /* Dark text for readability */
+}
+
+.create-page {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #dccfc6; /* White background for the form */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #6b4c41;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #6b4c41;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    background-color: #FAF7F3;
+    border: 1px solid #FAF7F3;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+textarea {
+    resize: vertical;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.file-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.file-name {
+    font-size: 0.9rem;
+    color: #6b4c41;
+}
+
+/* Buttons */
+button {
+    background-color: #4caf50; /* Green button */
+    color: FAF7F3;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #a36b62; /* Darker green on hover */
+}
+
+.status-btn {
+    padding: 8px 16px;
+    margin-right: 10px;
+    border: none;
+    background-color: #eee;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.status-btn.active {
+    background-color: #ab7a73; /* Dusty Rose */
+    color: white;
+
+}
+
+.star-rating {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 8px;
+    }
+    
+.star-rating .star {
+        font-size: 24px;
+        color: #ddd;
+        cursor: pointer;
+        transition: color 0.2s;
+        margin-right: 5px;
+    }
+    
+.star-rating .star.hover {
+        color: #ffc107;
+    }
+    
+.star-rating .star.selected {
+        color: #ffc107;
+    }
+    

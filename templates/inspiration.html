@@ -1,0 +1,98 @@
+{% extends '_base.html' %}
+
+{% block content %}
+<div class="article-preview">
+    <h2>Travel</h2>
+</div>
+
+<!-- Card container for Travel ideas -->
+<div class="card-container">
+    {% for card in travel_cards %}
+    <div class="card">
+        <img src="{{ url_for('static', filename=card.image) }}" alt="{{ card.title }}" class="card-img">
+        <div class="card-content">
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.description }}</p>
+            <!-- Form for adding to My List -->
+            <form action="{{ url_for('add_to_mylist') }}" method="POST">
+                <input type="hidden" name="title" value="{{ card.title }}">
+                <input type="hidden" name="description" value="{{ card.description }}">
+                <input type="hidden" name="image_url" value="{{ url_for('static', filename=card.image) }}">
+                <button type="submit" class="add-to-list-btn">Add to my list</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="article-preview">
+    <h2>Learn</h2>
+</div>
+
+<!-- Card container for Learn ideas -->
+<div class="card-container">
+    {% for card in learn_cards %}
+    <div class="card">
+        <img src="{{ url_for('static', filename=card.image) }}" alt="{{ card.title }}" class="card-img">
+        <div class="card-content">
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.description }}</p>
+            <!-- Form for adding to My List -->
+            <form action="{{ url_for('add_to_mylist') }}" method="POST">
+                <input type="hidden" name="title" value="{{ card.title }}">
+                <input type="hidden" name="description" value="{{ card.description }}">
+                <input type="hidden" name="image_url" value="{{ url_for('static', filename=card.image) }}">
+                <button type="submit" class="add-to-list-btn">Add to my list</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="article-preview">
+    <h2>Others</h2>
+</div>
+
+<!-- Card container for Other ideas -->
+<div class="card-container">
+    {% for card in other_cards %}
+    <div class="card">
+        <img src="{{ url_for('static', filename=card.image) }}" alt="{{ card.title }}" class="card-img">
+        <div class="card-content">
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.description }}</p>
+            <!-- Form for adding to My List -->
+            <form action="{{ url_for('add_to_mylist') }}" method="POST">
+                <input type="hidden" name="title" value="{{ card.title }}">
+                <input type="hidden" name="description" value="{{ card.description }}">
+                <input type="hidden" name="image_url" value="{{ url_for('static', filename=card.image) }}">
+                <button type="submit" class="add-to-list-btn">Add to my list</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+
+
+<script>
+function previewImage(event) {
+    const preview = document.getElementById('image-preview');
+    const file = event.target.files[0];
+        
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            preview.src = reader.result;
+            preview.style.display = 'block';  // Show the preview
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.style.display = 'none';  // Hide preview if no image selected
+    }
+}
+</script>
+    
+<!-- ****** -->
