@@ -12,80 +12,7 @@
             <button id="reading-btn" class="status-btn active">Reading Now</button>
             <button id="read-btn" class="status-btn">Already Read</button>
         </div>
-        
 
-        <div id="already-read-section" style="display: none;">
-            <div class="form-group">
-                <label for="notes">Notes</label>
-                <textarea name="notes" id="notes" class="form-control"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="rating">Rating</label>
-                <div id="star-rating" class="star-rating">
-                    <span data-value="1" class="star">&#9733;</span>
-                    <span data-value="2" class="star">&#9733;</span>
-                    <span data-value="3" class="star">&#9733;</span>
-                    <span data-value="4" class="star">&#9733;</span>
-                    <span data-value="5" class="star">&#9733;</span>
-                </div>
-                <input type="hidden" name="rating" id="rating" value="">
-            </div>
-
-
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const stars = document.querySelectorAll('.star-rating .star');
-                    const ratingInput = document.getElementById('rating');
-
-                        stars.forEach(s => {
-                            if (parseInt(s.getAttribute('data-value')) <= parseInt(value)) {
-                                s.classList.add('selected');
-                            } else {
-                                s.classList.remove('selected');
-                            }
-                        });
-
-
-
-                        star.addEventListener('mouseover', function() {
-                            stars.forEach(s => s.classList.remove('hover'));
-                            this.classList.add('hover');
-                            let prev = this.previousElementSibling;
-                            while (prev) {
-                                prev.classList.add('hover');
-                                prev = prev.previousElementSibling;
-                            }
-                        });
-
-                        star.addEventListener('mouseout', function() {
-                            stars.forEach(s => s.classList.remove('hover'));
-                        });
-                    });
-                
-            </script>
-        </div>
-
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const statusTitle = document.getElementById('status-title');
-            const switchStatusBtn = document.getElementById('switch-status-btn');
-            const alreadyReadSection = document.getElementById('already-read-section');
-
-            switchStatusBtn.addEventListener('click', function() {
-                if (statusTitle.textContent === 'Reading Now') {
-                    statusTitle.textContent = 'Already Read';
-                    switchStatusBtn.textContent = 'Switch to Reading Now';
-                    alreadyReadSection.style.display = 'block';
-                } else {
-                    statusTitle.textContent = 'Reading Now';
-                    switchStatusBtn.textContent = 'Switch to Already Read';
-                    alreadyReadSection.style.display = 'none';
-                }
-            });
-        });
-        </script>
-        
         <form method="POST" enctype="multipart/form-data" action="{{ url_for('create') }}">
             <!-- Title Input -->
             <div class="form-group">
@@ -95,34 +22,117 @@
 
             <!-- Author Input -->
             <div class="form-group">
-                <label for="content">Author:</label>
-                <textarea name="content" id="content" class="form-control" required></textarea>
+                <label for="author">Author</label>
+                <textarea name="author" id="author" class="form-control" required></textarea>
             </div>
 
-            <!-- Content Input -->
+            <!-- Genre Input -->
             <div class="form-group">
-                <label for="content">Geaner</label>
-                <textarea name="content" id="content" class="form-control" required></textarea>
+                <label for="genre">Genre</label>
+                <textarea name="genre" id="genre" class="form-control" required></textarea>
             </div>
+
             <!-- Number of Pages Input -->
             <div class="form-group">
                 <label for="pages">Number of Pages</label>
                 <input type="number" name="pages" id="pages" class="form-control" min="1" required>
             </div>
-            
-            <!-- Image Upload Section -->
-            <div class="form-group file-upload-container">
-                <label for="file-input" class="add-image-btn">+ Add Image</label>
-                <input type="file" name="image" id="file-input" class="file-input" accept="image/*" hidden>
-                <span id="file-name" class="file-name"></span>
+
+            <!-- Pages Read Slider -->
+            <div class="form-group" id="pages-read-slider" style="display: none;">
+                <label for="pages-read">Pages Read</label>
+                <input type="range" name="pages-read" id="pages-read" class="form-control" min="0" value="0">
+                <span id="pages-read-display">0</span> / <span id="total-pages-display">0</span>
             </div>
-            
-            <!-- Image Preview -->
-            <div id="image-preview" class="image-preview" style="border: 1px solid #ccc; min-height: 150px; margin-top: 10px;">
-                <!-- Default image shown if no file is selected -->
-                <img src="{{ url_for('static', filename='images/default.jpg') }}" alt="Default Image" style="max-width: 100%; height: auto;">
+
+<script>
+    const pagesInput = document.getElementById('pages');
+    const pagesReadSlider = document.getElementById('pages-read-slider');
+    const pagesReadInput = document.getElementById('pages-read');
+    const pagesReadDisplay = document.getElementById('pages-read-display');
+    const totalPagesDisplay = document.getElementById('total-pages-display');
+    const readingBtn = document.getElementById('reading-btn');
+    const readBtn = document.getElementById('read-btn');
+
+    // Listen for changes in the total pages input
+    pagesInput.addEventListener('input', function () {
+        const totalPages = parseInt(pagesInput.value, 10) || 0;
+
+        // Update the total pages display
+        totalPagesDisplay.textContent = totalPages;
+
+        // Show the slider if total pages > 0 and "Reading Now" is active
+        if (totalPages > 0 && readingBtn.classList.contains('active')) {
+            pagesReadSlider.style.display = 'block';
+            pagesReadInput.max = totalPages; // Set the slider's max value
+        } else {
+            pagesReadSlider.style.display = 'none';
+        }
+    });
+
+    // Listen for changes in the slider
+    pagesReadInput.addEventListener('input', function () {
+        pagesReadDisplay.textContent = pagesReadInput.value; // Update the "Pages Read" display
+    });
+
+    // Toggle between "Reading Now" and "Already Read" sections
+    readingBtn.addEventListener('click', function () {
+        document.getElementById('already-read-section').style.display = 'none';
+        pagesReadSlider.style.display = pagesInput.value > 0 ? 'block' : 'none'; // Show slider if pages > 0
+        this.classList.add('active');
+        readBtn.classList.remove('active');
+    });
+
+    readBtn.addEventListener('click', function () {
+        document.getElementById('already-read-section').style.display = 'block';
+        pagesReadSlider.style.display = 'none'; // Hide slider
+        this.classList.add('active');
+        readingBtn.classList.remove('active');
+    });
+</script>
+
+            <!-- Cover Design Selection -->
+            <div class="form-group">
+                <label for="cover">Choose a Cover Design</label>
+                <div class="cover-options">
+                    <label>
+                        <input type="radio" name="cover" value="img/book0.png" required>
+                        <img src="{{ url_for('static', filename='img/book0.png') }}" alt="Cover 1" class="cover-preview">
+                    </label>
+                    <label>
+                        <input type="radio" name="cover" value="img/book00.png" required>
+                        <img src="{{ url_for('static', filename='img/book00.png') }}" alt="Cover 2" class="cover-preview">
+                    </label>
+                </div>
+                <div class="start-date"></div>
+                    <label for="start-date">Start date</label>
+                    <input type="date" name="start-date" id="start-date" class="form-control">
+                </div>
             </div>
-            
+
+            <!-- Notes and Rating Section -->
+            <div id="already-read-section" style="display: none;">
+                <div class="form-group">
+                    <label for="finish-date">Finish date</label>
+                    <input type="date" name="finish-date" id="finish-date" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea name="notes" id="notes" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating</label>
+                    <div id="star-rating" class="star-rating">
+                        <span data-value="1" class="star">&#9733;</span>
+                        <span data-value="2" class="star">&#9733;</span>
+                        <span data-value="3" class="star">&#9733;</span>
+                        <span data-value="4" class="star">&#9733;</span>
+                        <span data-value="5" class="star">&#9733;</span>
+                    </div>
+                    <input type="hidden" name="rating" id="rating" value="">
+                </div>
+            </div>
+
             <!-- Submit Button -->
             <div class="form-group">
                 <button type="submit" class="submit-btn">Submit</button>
@@ -132,89 +142,46 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // STAR RATING LOGIC
-        const stars = document.querySelectorAll('.star-rating .star');
-        const ratingInput = document.getElementById('rating-input');
-        let currentRating = 0;
-        
-        stars.forEach(star => {
-            star.addEventListener('mouseover', function() {
-                const value = parseInt(this.getAttribute('data-value'));
-                highlightStars(value);
-            });
-            
-            star.addEventListener('mouseout', function() {
-                highlightStars(currentRating);
-            });
-            
-            star.addEventListener('click', function() {
-                currentRating = parseInt(this.getAttribute('data-value'));
-                ratingInput.value = currentRating;
-                highlightStars(currentRating);
-            });
-        });
-        
-        function highlightStars(value) {
-            stars.forEach(star => {
-                const starValue = parseInt(star.getAttribute('data-value'));
-                if (starValue <= value) {
-                    star.classList.add('hover');
+    // JavaScript for star rating functionality
+    const stars = document.querySelectorAll('.star');
+    const ratingInput = document.getElementById('rating');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function () {
+            const value = this.getAttribute('data-value');
+            ratingInput.value = value;
+
+            // Highlight stars up to the clicked one
+            stars.forEach(s => {
+                if (s.getAttribute('data-value') <= value) {
+                    s.classList.add('selected');
                 } else {
-                    star.classList.remove('hover');
+                    s.classList.remove('selected');
                 }
             });
-        }
-        
-        // Initialize stars with no selection
-        highlightStars(0);
-        
-        // STATUS TOGGLE LOGIC
-        const readingBtn = document.getElementById('reading-btn');
-        const readBtn = document.getElementById('read-btn');
-        const alreadyReadSection = document.getElementById('already-read-section');
-    
-        readingBtn.addEventListener('click', function () {
-            readingBtn.classList.add('active');
-            readBtn.classList.remove('active');
-            alreadyReadSection.style.display = 'none';
-            // Reset rating when switching to "Reading Now"
-            currentRating = 0;
-            ratingInput.value = 0;
-            highlightStars(0);
         });
-    
-        readBtn.addEventListener('click', function () {
-            readBtn.classList.add('active');
-            readingBtn.classList.remove('active');
-            alreadyReadSection.style.display = 'block';
+
+        // Add hover effect to highlight stars up to the hovered one
+        star.addEventListener('mouseover', function () {
+            const value = this.getAttribute('data-value');
+            stars.forEach(s => {
+                if (s.getAttribute('data-value') <= value) {
+                    s.classList.add('hovered');
+                } else {
+                    s.classList.remove('hovered');
+                }
+            });
         });
-    
-        // IMAGE PREVIEW LOGIC
-        const fileInput = document.getElementById('file-input');
-        const fileNameSpan = document.getElementById('file-name');
-        const imagePreview = document.getElementById('image-preview');
-        const defaultImage = "{{ url_for('static', filename='images/default.jpg') }}";
-    
-        // Initialize with default image
-        imagePreview.innerHTML = `<img src="${defaultImage}" alt="Image Preview" style="max-width: 100%; height: auto;">`;
-    
-        fileInput.addEventListener('change', function () {
-            const file = fileInput.files[0];
-            if (file) {
-                fileNameSpan.textContent = file.name;
-    
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Image Preview" style="max-width: 100%; height: auto;">`;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                fileNameSpan.textContent = '';
-                imagePreview.innerHTML = `<img src="${defaultImage}" alt="Image Preview" style="max-width: 100%; height: auto;">`;
-            }
+
+        // Remove hover effect when the mouse leaves the stars
+        star.addEventListener('mouseout', function () {
+            stars.forEach(s => s.classList.remove('hovered'));
         });
     });
 </script>
+
+<style>
+    
+</style>
 
 {% endblock %}
