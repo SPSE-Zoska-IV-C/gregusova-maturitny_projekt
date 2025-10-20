@@ -5,183 +5,163 @@
 {% endblock %}
 
 {% block content %}
-
 <div class="create-page">
-    <div class="article-preview">
-        <div class="book-status">
-            <button id="reading-btn" class="status-btn active">Reading Now</button>
-            <button id="read-btn" class="status-btn">Already Read</button>
-        </div>
-
-        <form method="POST" enctype="multipart/form-data" action="{{ url_for('create') }}">
-            <!-- Title Input -->
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" name="title" id="title" class="form-control" required>
-            </div>
-
-            <!-- Author Input -->
-            <div class="form-group">
-                <label for="author">Author</label>
-                <textarea name="author" id="author" class="form-control" required></textarea>
-            </div>
-
-            <!-- Genre Input -->
-            <div class="form-group">
-                <label for="genre">Genre</label>
-                <textarea name="genre" id="genre" class="form-control" required></textarea>
-            </div>
-
-            <!-- Number of Pages Input -->
-            <div class="form-group">
-                <label for="pages">Number of Pages</label>
-                <input type="number" name="pages" id="pages" class="form-control" min="1" required>
-            </div>
-
-            <!-- Pages Read Slider -->
-            <div class="form-group" id="pages-read-slider" style="display: none;">
-                <label for="pages-read">Pages Read</label>
-                <input type="range" name="pages-read" id="pages-read" class="form-control" min="0" value="0">
-                <span id="pages-read-display">0</span> / <span id="total-pages-display">0</span>
-            </div>
-
-<script>
-    const pagesInput = document.getElementById('pages');
-    const pagesReadSlider = document.getElementById('pages-read-slider');
-    const pagesReadInput = document.getElementById('pages-read');
-    const pagesReadDisplay = document.getElementById('pages-read-display');
-    const totalPagesDisplay = document.getElementById('total-pages-display');
-    const readingBtn = document.getElementById('reading-btn');
-    const readBtn = document.getElementById('read-btn');
-
-    // Listen for changes in the total pages input
-    pagesInput.addEventListener('input', function () {
-        const totalPages = parseInt(pagesInput.value, 10) || 0;
-
-        // Update the total pages display
-        totalPagesDisplay.textContent = totalPages;
-
-        // Show the slider if total pages > 0 and "Reading Now" is active
-        if (totalPages > 0 && readingBtn.classList.contains('active')) {
-            pagesReadSlider.style.display = 'block';
-            pagesReadInput.max = totalPages; // Set the slider's max value
-        } else {
-            pagesReadSlider.style.display = 'none';
-        }
-    });
-
-    // Listen for changes in the slider
-    pagesReadInput.addEventListener('input', function () {
-        pagesReadDisplay.textContent = pagesReadInput.value; // Update the "Pages Read" display
-    });
-
-    // Toggle between "Reading Now" and "Already Read" sections
-    readingBtn.addEventListener('click', function () {
-        document.getElementById('already-read-section').style.display = 'none';
-        pagesReadSlider.style.display = pagesInput.value > 0 ? 'block' : 'none'; // Show slider if pages > 0
-        this.classList.add('active');
-        readBtn.classList.remove('active');
-    });
-
-    readBtn.addEventListener('click', function () {
-        document.getElementById('already-read-section').style.display = 'block';
-        pagesReadSlider.style.display = 'none'; // Hide slider
-        this.classList.add('active');
-        readingBtn.classList.remove('active');
-    });
-</script>
-
-            <!-- Cover Design Selection -->
-            <div class="form-group">
-                <label for="cover">Choose a Cover Design</label>
-                <div class="cover-options">
-                    <label>
-                        <input type="radio" name="cover" value="img/book0.png" required>
-                        <img src="{{ url_for('static', filename='img/book0.png') }}" alt="Cover 1" class="cover-preview">
-                    </label>
-                    <label>
-                        <input type="radio" name="cover" value="img/book00.png" required>
-                        <img src="{{ url_for('static', filename='img/book00.png') }}" alt="Cover 2" class="cover-preview">
-                    </label>
-                </div>
-                <div class="start-date"></div>
-                    <label for="start-date">Start date</label>
-                    <input type="date" name="start-date" id="start-date" class="form-control">
-                </div>
-            </div>
-
-            <!-- Notes and Rating Section -->
-            <div id="already-read-section" style="display: none;">
-                <div class="form-group">
-                    <label for="finish-date">Finish date</label>
-                    <input type="date" name="finish-date" id="finish-date" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="notes">Notes</label>
-                    <textarea name="notes" id="notes" class="form-control"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="rating">Rating</label>
-                    <div id="star-rating" class="star-rating">
-                        <span data-value="1" class="star">&#9733;</span>
-                        <span data-value="2" class="star">&#9733;</span>
-                        <span data-value="3" class="star">&#9733;</span>
-                        <span data-value="4" class="star">&#9733;</span>
-                        <span data-value="5" class="star">&#9733;</span>
-                    </div>
-                    <input type="hidden" name="rating" id="rating" value="">
-                </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="form-group">
-                <button type="submit" class="submit-btn">Submit</button>
-            </div>
-        </form>
+  <div class="article-preview">
+    <div class="book-status">
+      <button id="reading-btn" class="status-btn active">Reading Now</button>
+      <button id="read-btn" class="status-btn">Already Read</button>
     </div>
+
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('create') }}">
+      <input type="hidden" name="status" id="status" value="Reading Now">
+
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label for="author">Author</label>
+        <textarea name="author" id="author" class="form-control" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="genre">Genre</label>
+        <textarea name="genre" id="genre" class="form-control" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="pages">Number of Pages</label>
+        <input type="number" name="pages" id="pages" class="form-control" min="1" required>
+      </div>
+
+      <!-- Reading Now only -->
+      <div id="pages-read-section" class="form-group">
+        <label for="pages_read">Pages Read</label>
+        <input type="number" name="pages_read" id="pages_read" class="form-control" min="0" value="0">
+      </div>
+      <div id="start-date-reading" class="form-group">
+        <label for="start_date_reading">Start date</label>
+        <input type="date" id="start_date_reading" name="start_date" class="form-control" required>
+      </div>
+
+      <!-- Already Read only -->
+      <div id="already-read-section" style="display:none;">
+        <div class="form-group">
+          <label for="start_date_read">Start date</label>
+          <input type="date" id="start_date_read" name="start_date" class="form-control" disabled>
+        </div>
+        <div class="form-group">
+          <label for="finish_date">Finish date</label>
+          <input type="date" id="finish_date" name="finish_date" class="form-control" disabled>
+        </div>
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <textarea name="notes" id="notes" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="rating">Rating</label>
+          <div id="star-rating" class="star-rating">
+            <span data-value="1" class="star">&#9733;</span>
+            <span data-value="2" class="star">&#9733;</span>
+            <span data-value="3" class="star">&#9733;</span>
+            <span data-value="4" class="star">&#9733;</span>
+            <span data-value="5" class="star">&#9733;</span>
+          </div>
+          <input type="hidden" name="rating" id="rating" value="">
+        </div>
+      </div>
+
+      <!-- Cover -->
+      <div class="form-group">
+        <label for="cover">Choose a Cover Design</label>
+        <div class="cover-options">
+          <label>
+            <input type="radio" name="cover" value="img/book0.png" required>
+            <img src="{{ url_for('static', filename='img/book0.png') }}" alt="Cover 1" class="cover-preview">
+          </label>
+          <label>
+            <input type="radio" name="cover" value="img/book00.png" required>
+            <img src="{{ url_for('static', filename='img/book00.png') }}" alt="Cover 2" class="cover-preview">
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="submit-btn">Submit</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
-    // JavaScript for star rating functionality
-    const stars = document.querySelectorAll('.star');
-    const ratingInput = document.getElementById('rating');
+  // Toggle sections + required/disabled flags
+  const readingBtn = document.getElementById('reading-btn');
+  const readBtn = document.getElementById('read-btn');
+  const statusInput = document.getElementById('status');
 
-    stars.forEach(star => {
-        star.addEventListener('click', function () {
-            const value = this.getAttribute('data-value');
-            ratingInput.value = value;
+  const pagesReadSection = document.getElementById('pages-read-section');
+  const startDateReading = document.getElementById('start_date_reading');
 
-            // Highlight stars up to the clicked one
-            stars.forEach(s => {
-                if (s.getAttribute('data-value') <= value) {
-                    s.classList.add('selected');
-                } else {
-                    s.classList.remove('selected');
-                }
-            });
-        });
+  const alreadyReadSection = document.getElementById('already-read-section');
+  const startDateRead = document.getElementById('start_date_read');
+  const finishDate = document.getElementById('finish_date');
 
-        // Add hover effect to highlight stars up to the hovered one
-        star.addEventListener('mouseover', function () {
-            const value = this.getAttribute('data-value');
-            stars.forEach(s => {
-                if (s.getAttribute('data-value') <= value) {
-                    s.classList.add('hovered');
-                } else {
-                    s.classList.remove('hovered');
-                }
-            });
-        });
+  function activateReadingNow() {
+    alreadyReadSection.style.display = 'none';
+    pagesReadSection.style.display = 'block';
 
-        // Remove hover effect when the mouse leaves the stars
-        star.addEventListener('mouseout', function () {
-            stars.forEach(s => s.classList.remove('hovered'));
-        });
+    statusInput.value = 'Reading Now';
+
+    // enable reading start date
+    startDateReading.disabled = false;
+    startDateReading.required = true;
+
+    // disable already-read dates
+    startDateRead.disabled = true; startDateRead.required = false; startDateRead.value = '';
+    finishDate.disabled = true; finishDate.required = false; finishDate.value = '';
+
+    readingBtn.classList.add('active');
+    readBtn.classList.remove('active');
+  }
+
+  function activateAlreadyRead() {
+    alreadyReadSection.style.display = 'block';
+    pagesReadSection.style.display = 'none';
+
+    statusInput.value = 'Already Read';
+
+    // disable reading start date
+    startDateReading.disabled = true; startDateReading.required = false;
+
+    // enable already-read dates
+    startDateRead.disabled = false; startDateRead.required = true;
+    finishDate.disabled = false; finishDate.required = true;
+
+    readBtn.classList.add('active');
+    readingBtn.classList.remove('active');
+  }
+
+  readingBtn.addEventListener('click', activateReadingNow);
+  readBtn.addEventListener('click', activateAlreadyRead);
+  activateReadingNow(); // initial state
+
+  // star rating
+  const stars = document.querySelectorAll('.star');
+  const ratingInput = document.getElementById('rating');
+  stars.forEach(star => {
+    star.addEventListener('click', function () {
+      const value = this.getAttribute('data-value');
+      ratingInput.value = value;
+      stars.forEach(s => s.classList.toggle('selected', s.getAttribute('data-value') <= value));
     });
+    star.addEventListener('mouseover', function () {
+      const value = this.getAttribute('data-value');
+      stars.forEach(s => s.classList.toggle('hovered', s.getAttribute('data-value') <= value));
+    });
+    star.addEventListener('mouseout', function () {
+      stars.forEach(s => s.classList.remove('hovered'));
+    });
+  });
 </script>
-
-<style>
-    
-</style>
-
 {% endblock %}
